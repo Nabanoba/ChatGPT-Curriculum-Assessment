@@ -10,7 +10,7 @@ lda = joblib.load("lda_model.pkl")
 vectorizer = joblib.load("vectorizer.pkl")
 
 # Load dataset
-df = pd.read_csv("ALL_with_features.csv")  # Make sure this is uploaded
+df = pd.read_csv("ALL_with_features.xlsx")  # Make sure this is uploaded
 
 @app.route("/")
 def home():
