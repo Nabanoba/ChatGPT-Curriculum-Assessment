@@ -1,11 +1,12 @@
 from flask import Flask, request, jsonify
-import pickle
+import joblib
+import os
 
 app = Flask(__name__)
 
-# Load model
-lda = pickle.load(open("lda_model.pkl", "rb"))
-vectorizer = pickle.load(open("vectorizer.pkl", "rb"))
+# Load model correctly using joblib
+lda = joblib.load("lda_model.pkl")
+vectorizer = joblib.load("vectorizer.pkl")
 
 @app.route("/")
 def home():
@@ -13,7 +14,6 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-
     question = request.json["question"]
 
     X = vectorizer.transform([question])
@@ -26,4 +26,5 @@ def predict():
     })
 
 if __name__ == "__main__":
-    app.run()
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
