@@ -1,46 +1,60 @@
-from flask import Flask, request, jsonify, render_template
-import joblib
-import pandas as pd
 import os
+import random
+from flask import Flask, request, jsonify, render_template
+import pandas as pd
+import joblib
 
 app = Flask(__name__)
 
-# Load model
-lda = joblib.load("lda_model.pkl")
-vectorizer = joblib.load("vectorizer.pkl")
+# ------------------------
+# Load dataset & models
+# ------------------------
+# Make sure these files are in the same folder as app.py
+df = pd.read_excel("ALL_with_features.xlsx")  # Excel dataset
+lda = joblib.load("lda_model.pkl")            # LDA model
+vectorizer = joblib.load("vectorizer.pkl")    # CountVectorizer
 
-# Load dataset
-df = pd.read_csv("ALL_with_features.xlsx")  # Make sure this is uploaded
-
+# ------------------------
+# Home page
+# ------------------------
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("index.html")  # HTML interface
 
-@app.route("/random")
-def random_question():
-    # Pick a random question
-    question = df['Item'].sample(n=1).iloc[0]
-    
-    # Get topic prediction
-    X = vectorizer.transform([question])
-    topic = lda.transform(X)
-    topic_id = topic.argmax()
-    
-    return render_template("index.html",
-                           random_question=question,
-                           predicted_topic=topic_id)
-
+# ------------------------
+# Predict topic for a user question
+# ------------------------
 @app.route("/predict", methods=["POST"])
 def predict():
-    question = request.form["question"]
-    X = vectorizer.transform([question])
-    topic = lda.transform(X)
-    topic_id = topic.argmax()
-    
-    return render_template("index.html",
-                           user_question=question,
-                           predicted_topic=topic_id)
+    data = request.json
+    question = data.get("question", "")
+    if not question:
+        return jsonify({"error": "No question provided"}), 400
 
+    X = vectorizer.transform([question])
+    topic_distribution = lda.transform(X)
+    topic_id = topic_distribution.argmax()
+
+    return jsonify({"predicted_topic": int(topic_id)})
+
+# ------------------------
+# Random question feature
+# ------------------------
+@app.route("/random", methods=["GET"])
+def random_question():
+    question = random.choice(df['Item'].tolist())
+    X = vectorizer.transform([question])
+    topic_distribution = lda.transform(X)
+    topic_id = topic_distribution.argmax()
+
+    return jsonify({
+        "question": question,
+        "predicted_topic": int(topic_id)
+    })
+
+# ------------------------
+# Run app with Render port
+# ------------------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
