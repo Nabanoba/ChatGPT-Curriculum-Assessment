@@ -5,25 +5,18 @@ import pandas as pd
 import joblib
 
 app = Flask(__name__)
-
-# ------------------------
 # Load dataset & models
-# ------------------------
-# Make sure these files are in the same folder as app.py
-df = pd.read_excel("ALL_with_features.xlsx")  # Excel dataset
-lda = joblib.load("lda_model.pkl")            # LDA model
-vectorizer = joblib.load("vectorizer.pkl")    # CountVectorizer
+df = pd.read_excel("ALL_with_features.xlsx") 
+lda = joblib.load("lda_model.pkl")            
+vectorizer = joblib.load("vectorizer.pkl")    
 
-# ------------------------
 # Home page
-# ------------------------
 @app.route("/")
 def home():
-    return render_template("index.html")  # HTML interface
+    return render_template("index.html")  
 
-# ------------------------
 # Predict topic for a user question
-# ------------------------
+
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.json
@@ -37,9 +30,7 @@ def predict():
 
     return jsonify({"predicted_topic": int(topic_id)})
 
-# ------------------------
 # Random question feature
-# ------------------------
 @app.route("/random", methods=["GET"])
 def random_question():
     question = random.choice(df['Item'].tolist())
@@ -51,10 +42,7 @@ def random_question():
         "question": question,
         "predicted_topic": int(topic_id)
     })
-
-# ------------------------
 # Run app with Render port
-# ------------------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
