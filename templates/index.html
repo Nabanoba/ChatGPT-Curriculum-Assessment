@@ -1,39 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>LDA Competency Model</title>
+    <title>Competency Assessment</title>
 </head>
 <body>
-    <h1>LDA Competency Model</h1>
-
-    <!-- Form to type your own question -->
-    <h2>Type a question</h2>
-    <form method="post" action="/predict">
-        <textarea name="question" rows="3" cols="60" placeholder="Type your question here"></textarea><br>
-        <input type="submit" value="Predict Topic">
+    <h2>Enter Student Responses</h2>
+    <form action="/analyze" method="post">
+        <textarea name="responses" rows="10" cols="80" placeholder="Enter one response per line"></textarea><br><br>
+        <input type="submit" value="Analyze Competency">
     </form>
-
-    <!-- Button to get a random question -->
-    <h2>Or get a random question</h2>
-    <form method="get" action="/random">
-        <input type="submit" value="Random Question">
-    </form>
-
-    <!-- Show typed question result -->
-    {% if user_question %}
-        <h3>Your Question:</h3>
-        <p>{{ user_question }}</p>
-        <h3>Predicted Topic:</h3>
-        <p>{{ predicted_topic }}</p>
-    {% endif %}
-
-    <!-- Show random question result -->
-    {% if random_question %}
-        <h3>Random Question:</h3>
-        <p>{{ random_question }}</p>
-        <h3>Predicted Topic:</h3>
-        <p>{{ predicted_topic }}</p>
-    {% endif %}
-
 </body>
 </html>

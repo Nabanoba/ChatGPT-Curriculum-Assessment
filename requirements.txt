@@ -3,3 +3,4 @@ pandas
 scikit-learn
 joblib
 openpyxl
+numpy==1.26.2

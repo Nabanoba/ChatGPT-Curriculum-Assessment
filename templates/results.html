@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results</title>
+</head>
+<body>
+    <h2>Competency Assessment Results</h2>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Response</th>
+            <th>Cluster</th>
+            <th>Topic Distribution</th>
+        </tr>
+        {% for r in results %}
+        <tr>
+            <td>{{ r.response }}</td>
+            <td>{{ r.cluster }}</td>
+            <td>{{ r.topics }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <a href="/">Analyze More Responses</a>
+</body>
+</html>
