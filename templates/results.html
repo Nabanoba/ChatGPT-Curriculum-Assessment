@@ -1,25 +1,154 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Results</title>
+    <title>Competency Assessment Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f6f8;
+        }
+
+        /* Title styling with gradient text */
+        h2 {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #1E3A8A, #10B981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+
+        .question-box {
+            background-color: #DBEAFE;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-style: italic;
+            border-left: 5px solid #1E3A8A;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1E40AF;
+            color: white;
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #10B981;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #047857;
+        }
+
+        /* Competency Level Colors */
+        .Low {
+            color: #DC2626; /* red */
+            font-weight: bold;
+        }
+
+        .Moderate {
+            color: #F59E0B; /* orange */
+            font-weight: bold;
+        }
+
+        .High {
+            color: #059669; /* green */
+            font-weight: bold;
+        }
+
+        /* Responsive table */
+        @media screen and (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            th {
+                position: sticky;
+                top: 0;
+            }
+            tr {
+                margin-bottom: 15px;
+            }
+            td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                font-weight: bold;
+                text-align: left;
+            }
+        }
+    </style>
 </head>
 <body>
+
     <h2>Competency Assessment Results</h2>
-    <table border="1" cellpadding="5">
-        <tr>
-            <th>Response</th>
-            <th>Cluster</th>
-            <th>Topic Distribution</th>
-        </tr>
-        {% for r in results %}
-        <tr>
-            <td>{{ r.response }}</td>
-            <td>{{ r.cluster }}</td>
-            <td>{{ r.topics }}</td>
-        </tr>
-        {% endfor %}
+
+    {% if question %}
+    <div class="question-box">
+        <strong>Question:</strong> {{ question }}
+    </div>
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Student Response</th>
+                <th>Competency Level</th>
+                <th>Topics Identified</th>
+                <th>Explanation</th>
+                <th>Feedback</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in results %}
+            <tr>
+                <td data-label="Student Response">{{ r.response }}</td>
+                <td class="{% if 'Low' in r.competency %}Low{% elif 'Moderate' in r.competency %}Moderate{% elif 'High' in r.competency %}High{% endif %}" data-label="Competency Level">
+                    {{ r.competency }}
+                </td>
+                <td data-label="Topics Identified">{{ r.topics }}</td>
+                <td data-label="Explanation">{{ r.explanation }}</td>
+                <td data-label="Feedback">{{ r.feedback }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-    <br>
-    <a href="/">Analyze More Responses</a>
+
+    <div style="text-align: center;">
+        <a href="/" class="btn">Analyze More Responses</a>
+    </div>
+
 </body>
 </html>

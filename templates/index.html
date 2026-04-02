@@ -2,12 +2,112 @@
 <html>
 <head>
     <title>Competency Assessment</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            background: #f0f4f8; 
+        }
+
+        /* Header with gradient-colored words */
+        h2 { 
+            text-align: center; 
+            padding: 25px 0; 
+            margin: 0;
+            font-size: 28px; 
+        }
+
+        h2 span {
+            background: linear-gradient(90deg, #1E3A8A, #10B981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+
+        form { 
+            max-width: 700px; 
+            margin: 40px auto; 
+            background: white; 
+            padding: 25px; 
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1); 
+            border-radius: 10px; 
+        }
+
+        /* Label colors by role */
+        label { 
+            font-weight: bold; 
+            display: block; 
+            margin-top: 20px; 
+        }
+
+        label.teacher span {
+            color: #1E3A8A; /* Teacher word color */
+        }
+
+        label.student span {
+            color: #D97706; /* Student word color */
+        }
+
+        textarea { 
+            width: 100%; 
+            height: 60px; 
+            padding: 12px; 
+            margin-top: 8px; 
+            border-radius: 6px; 
+            border: 1px solid #ccc; 
+            font-size: 14px; 
+            resize: vertical; 
+            transition: 0.3s; 
+        }
+
+        textarea:focus {
+            border-color: #10B981;
+            box-shadow: 0 0 5px rgba(16,185,129,0.5);
+            outline: none;
+        }
+
+        .btn { 
+            display: block;
+            width: 100%; 
+            margin-top: 25px; 
+            padding: 12px; 
+            background: none; /* remove background */
+            color: #10B981; /* button text color */
+            border: 2px solid #10B981; /* optional border */
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold; 
+            transition: 0.3s;
+        }
+
+        .btn:hover { 
+            color: #fff;
+            background-color: #10B981;
+            border-color: #10B981;
+        }
+
+    </style>
 </head>
 <body>
-    <h2>Enter Student Responses</h2>
+
+    <!-- Header -->
+    <h2><span>Competency Assessment System</span></h2>
+
     <form action="/analyze" method="post">
-        <textarea name="responses" rows="10" cols="80" placeholder="Enter one response per line"></textarea><br><br>
-        <input type="submit" value="Analyze Competency">
+        <!-- Teacher inputs question -->
+        <label for="question" class="teacher"><span>Teacher:</span> Enter the question</label>
+        <textarea name="question" id="question" placeholder="Type the question here..." required></textarea>
+
+        <!-- Teacher inputs correct answer -->
+        <label for="correct_answer" class="teacher"><span>Teacher:</span> Enter the correct answer (hidden from student)</label>
+        <textarea name="correct_answer" id="correct_answer" placeholder="Type the correct answer..." required></textarea>
+
+        <!-- Student response -->
+        <label for="responses" class="student"><span>Student:</span> Enter response(s)</label>
+        <textarea name="responses" id="responses" placeholder="Student types their answer here..." required></textarea>
+
+        <button type="submit" class="btn"><span>Analyze Competency</span></button>
     </form>
 </body>
 </html>
